@@ -1,17 +1,3 @@
-# README Outline:
-* Project Description
-* Prerequisites
-* Usage
-	* Building
-	* Testing
-	* Execution
-* Additional Notes
-* Version History and Retention
-* License
-* Contributions
-* Contact Information
-* Acknowledgements
-
 # Project Description
 
 ***Smart Columbus Parking Prediction***
