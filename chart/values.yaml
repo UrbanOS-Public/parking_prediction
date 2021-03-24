@@ -1,0 +1,43 @@
+image:
+  repository: your-repository-or-dockerhub.com
+  tag: latest
+  pullPolicy: Always
+
+replicaCount: 1
+
+service:
+  type: NodePort
+  port: 80
+
+mssql:
+  serverUrl: "localhost"
+  userName: "padmin"
+  password: "STRONG_PASSWORD"
+  database: parking_prediction
+
+comparedModels: ''
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/actions.redirect: '{"Type": "redirect", "RedirectConfig":{"Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+  rootDnsZone: yourhost.com
+
+resources:
+  api:
+    limits:
+      memory: 4Gi
+      cpu: "2"
+    requests:
+      memory: 4Gi
+      cpu: "2"
+  train:
+    limits:
+      memory: 5Gi
+      cpu: "1"
+    requests:
+      memory: 5Gi
+      cpu: "1"

@@ -1,0 +1,40 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ .Chart.Name }}-train
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  schedule: "0 5 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 3
+      template:
+        spec:
+          restartPolicy: Never
+          serviceAccountName: parking-prediction-train
+          containers:
+          - name: {{ .Chart.Name }}
+            image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+            command: ["./train.sh"]
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            env:
+            - name: SCOS_ENV
+              value: {{ .Values.scosEnv }}
+            - name: SQL_SERVER_URL
+              value: {{ .Values.mssql.serverUrl }}
+            - name: SQL_SERVER_DATABASE
+              value: {{ .Values.mssql.database }}
+            - name: SQL_SERVER_USERNAME
+              value: {{ .Values.mssql.userName }}
+            - name: SQL_SERVER_PASSWORD
+              value: {{ .Values.mssql.password }}
+            - name: VAULT_ROLE
+              value: parking-prediction-train-role
+            - name: VAULT_CREDENTIALS_KEY
+              value: parking_prediction_train
+            resources:
+{{ toYaml .Values.resources.train | indent 14 }}

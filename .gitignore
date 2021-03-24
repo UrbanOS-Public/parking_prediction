@@ -1,4 +1,5 @@
 app/output/*.txt
+app/_models/
 venv/
 
 __pycache__/

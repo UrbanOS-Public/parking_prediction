@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+      annotations:
+        prometheus.io/port: "9113"
+        prometheus.io/scrape: "true"
+    spec:
+      serviceAccountName: parking-prediction-api
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        command: ["./start.sh"]
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: SCOS_ENV
+          value: {{ .Values.scosEnv }}
+        - name: VAULT_ROLE
+          value: parking-prediction-api-role
+        - name: VAULT_CREDENTIALS_KEY
+          value: parking_prediction_api
+        - name: COMPARED_MODELS
+          value: {{ .Values.comparedModels }}
+        resources:
+{{ toYaml .Values.resources.api | indent 10 }}
+      - name: {{ .Chart.Name }}-metrics
+        image: nginx/nginx-prometheus-exporter:0.8.0
+        args: ["-nginx.scrape-uri", "http://127.0.0.1:8080/stub_status"]
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 9113
+        env:
+        - name: LISTEN_ADDRESS
+          value: ":9113"

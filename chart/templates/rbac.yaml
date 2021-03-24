@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: parking-prediction-api
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: parking-prediction-train

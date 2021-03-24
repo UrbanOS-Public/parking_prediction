@@ -1,0 +1,4 @@
+apiVersion: v1
+description: Predictive parking application
+name: predictive-parking
+version: 1.0.0
