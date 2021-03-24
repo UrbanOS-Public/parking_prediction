@@ -6,6 +6,8 @@ This repository contains the code needed to train a model to make predictions ab
 
 This code and model are specifically tuned to the parking situation in Columbus, but could be used as a base to build more generic parking availability models.
 
+For an example of the data transformation Columbus used to turn parking transaction data into the parking occupancy data needed for this model, see the [parking prediction orchestrator](https://github.com/Datastillery/parking_prediction_orchestration) project.
+
 # Prerequisites
 
 Requires:
