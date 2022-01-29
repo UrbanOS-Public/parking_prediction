@@ -1,4 +1,4 @@
-FROM python:3.8 as base-python
+FROM python:3.8-buster as base-python
 
 RUN apt-get clean \
     && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
